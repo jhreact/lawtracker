@@ -1,39 +1,63 @@
 var gitLabURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3/projects/'
+var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3'
+var gitLabAuthURL = 'http://bitnami-gitlab-b76b.cloudapp.net/users/sign_in'
 var privateToken = '?private_token=AGrAjazL79tTNqJLeABp'
 
 angular.module('lawtracker.controllers', [
   'lawtracker.services'
 ])
 
-.controller('AuthController', function ($scope, $location) {
+.controller('AuthController', function ($scope, $location, $http, Auth) {
   $scope.user = {};
+  $scope.newUser = {};
+  $http.defaults.useXDomain = true;
+
 
   $scope.signin = function () {
-    console.log($scope.user) //sign in through git lab here
-    $("#hrBanner").toggle()
-    $location.path('/dashboard');
-
+    Auth.signin($scope.user)
+      .then(function (token) {
+        //add private key to all requests
+        $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
+        $location.path('/dashboard');
+      })
+      .catch(function (error) {
+        console.error(error); //todo: clear forms
+      });
   };
 
+
   $scope.signup = function () {
-    console.log($scope.user) //sign up through git lab here
-    $("#hrBanner").toggle()
-    $location.path('/dashboard');
+    console.log($scope.newUser) //sign up through git lab here
+    Auth.signup($scope.newUser)
+      .then(function (token) {
+        //add private key to all requests
+        $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
+        $location.path('/dashboard');
+      })
+      .catch(function (error) {
+        console.error(error); //todo: clear forms
+      });
   };
 })
 .controller('DashController', function ($scope, $http, $routeParams) {
   $scope.userContributions = [];
   $scope.userBills = [];
-  $http.get(gitLabURL + privateToken).success(function(data) {
+  
+  $http({
+    method: 'GET',
+    url: APIURL + '/projects'
+  }).success(function(data) {
     $scope.userBills = data;
-    var name = $scope.userBills[0].name
-    var id = $scope.userBills[0].id
-    $http.get(gitLabURL + id + '/repository/commits' + privateToken).success(function(commits) {
+    $http({
+      method: 'GET',
+      url: APIURL + '/projects/' + data[0].id + '/repository/commits'
+    }).success(function(commits) {
       for (var j=0; j<commits.length; j++){
+
         var commit = commits[j]
-        var commitStr = name + " - " + commit.title +  " (" + commit.created_at + ")";
+        var commitStr = data[0].name + " - " + commit.title +  " (" + commit.created_at + ")";
         if ($scope.userContributions.length < 4) {
-          $scope.userContributions.push({text: commitStr, billId: id, contribId: commit.id});
+          $scope.userContributions.push({text: commitStr, billId: data[0].id, contribId: commit.id});
         }
       }
     })
@@ -42,10 +66,6 @@ angular.module('lawtracker.controllers', [
 .controller('BillDetailController', function($scope, $http, $routeParams) {
     $scope.bill = {id: $routeParams.billId};
 
-    $http.defaults.useXDomain = true;
-    delete $http.defaults.headers.common['X-Requested-With'];
-    // $http.defaults.headers.common.PRIVATE-TOKEN = 'AGrAjazL79tTNqJLeABp';
-    // $httpProvider.defaults.headers.get = {'PRIVATE-TOKEN': 'AGrAjazL79tTNqJLeABp'};
     $http.get(gitLabURL + $routeParams.billId + privateToken).success(function(data) {
       $scope.bill = data;
     })
@@ -172,13 +192,3 @@ angular.module('lawtracker.controllers', [
     };
 
 });
-
-// Kanged from https://stackoverflow.com/a/2919363
-// function nl2br (str, is_xhtml) {
-//   var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-//   return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
-// }
-function nl2br (str, is_xhtml) {
-  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-  return (str + '').replace(/([^\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
-}
