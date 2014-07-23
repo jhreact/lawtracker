@@ -1,28 +1,59 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#/dashboard">LawTracker</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="#about">About</a>
+        </li>
+        <li><a href="#/dashboard">My Profile</a>
+        </li>
+        <li><a href="#contact">Help</a>
+        </li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
 <div class="container" ng-controller="CreateBillController">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-xs-10">
       <form novalidate class="create-bill-form">
-        Filename: <input type="text" ng-model="bill.filename" /><br />
+        Bill Name: <input type="text" ng-model="bill.filename" /><br />
         Description: <input type="text" ng-model="bill.description" /><br />
         Content:<br />
-        <textarea ng-model="bill.content" cols="170" rows="50"></textarea>
+        <textarea ng-model="bill.content" cols="150" rows="50"></textarea>
         <button ng-click="reset()">RESET</button>
         <button ng-click="create(bill)">SAVE</button>
       </form>
       <! -- main content -->
       <pre>{{bill.content}}</pre>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-2">
       <!-- sidbar content -->
       <ul class="nav nav-pills nav-stacked">
         <li>
           <a href="/wireframes/fork.html">Fork</a>
         </li>
         <li>
-          <a href="/wireframes/edit.html">Edit</a>
+          <a href="/#/bills/create">Create</a>
         </li>
         <li>
-          <a href="/wireframes/settings.html">Settings</a>
+          <a href="/#/bills/{{bill.id}}">View</a>
+        </li>
+        <li>
+          <a href="/#/bills/{{bill.id}}/revisions">Revisions</a>
         </li>
       </ul>
     </div>

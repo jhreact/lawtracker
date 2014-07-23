@@ -1,6 +1,7 @@
 angular.module('lawtracker', [
   'ngRoute',
-  'lawtracker.controllers'
+  'lawtracker.controllers',
+  'hljs'
 ])
 .config(function($routeProvider, $httpProvider) {
   $routeProvider
