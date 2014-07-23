@@ -23,6 +23,7 @@ angular.module('lawtracker.services', [])
 
   //uses gitLab's built api to authenticate users
   var signin = function (user) {
+    console.log(user);
     return $http({
       method: 'POST',
       url: APIURL + '/session', 
@@ -34,15 +35,17 @@ angular.module('lawtracker.services', [])
   };
 
   var signup = function (user) {
-    console.log('in auth service')
+    console.log(user)
     return $http({
       method: 'POST',
-      url: APIURL + '/users',
+      url: '/api/user/new',
       data: user
     })
-    .then(function (resp) {
-      console.log(resp);
-      return resp.data.private_token;
+    .success(function (resp) {
+      return signin({email: resp.data.email, password: user.password}); //sign in the user with new details
+    })
+    .error(function (e){
+      throw e; //todo: clear forms
     });
   };
 
@@ -54,4 +57,7 @@ angular.module('lawtracker.services', [])
     signup: signup
     // signout: signout
   };
+})
+.factory('GitLab', function($http){
+  var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3'
 });

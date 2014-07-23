@@ -10,8 +10,6 @@ angular.module('lawtracker.controllers', [
 .controller('AuthController', function ($scope, $location, $http, Auth) {
   $scope.user = {};
   $scope.newUser = {};
-  $http.defaults.useXDomain = true;
-
 
   $scope.signin = function () {
     Auth.signin($scope.user)
@@ -27,16 +25,22 @@ angular.module('lawtracker.controllers', [
 
 
   $scope.signup = function () {
-    console.log($scope.newUser) //sign up through git lab here
-    Auth.signup($scope.newUser)
-      .then(function (token) {
-        //add private key to all requests
-        $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
-        $location.path('/dashboard');
-      })
-      .catch(function (error) {
-        console.error(error); //todo: clear forms
-      });
+    if ($scope.newUser.password === $scope.newUser.confirmPassword && $scope.newUser.password.length >= 6) {
+      $scope.newUser.username = $scope.newUser.name // git lab username will be person's name
+      delete $scope.newUser.confirmPassword;
+      Auth.signup($scope.newUser)
+        .success(function (token) {
+          //add private key to all requests
+          $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
+          $location.path('/dashboard');
+        })
+        .catch(function (error) {
+          console.error(error); //todo: clear forms
+        });
+      
+    } else {
+      //reset forms
+    }
   };
 })
 .controller('DashController', function ($scope, $http, $routeParams) {
