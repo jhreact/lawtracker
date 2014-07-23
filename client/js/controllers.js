@@ -25,11 +25,12 @@ angular.module('lawtracker.controllers', [
 
 
   $scope.signup = function () {
+    // this input checking should be done in the view (with angular)
     if ($scope.newUser.password === $scope.newUser.confirmPassword && $scope.newUser.password.length >= 6) {
       $scope.newUser.username = $scope.newUser.name // git lab username will be person's name
       delete $scope.newUser.confirmPassword;
       Auth.signup($scope.newUser)
-        .success(function (token) {
+        .then(function (token) {
           //add private key to all requests
           $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
           $location.path('/dashboard');
@@ -38,8 +39,6 @@ angular.module('lawtracker.controllers', [
           console.error(error); //todo: clear forms
         });
       
-    } else {
-      //reset forms
     }
   };
 })
