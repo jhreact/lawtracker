@@ -37,6 +37,10 @@ angular.module('lawtracker', [
       templateUrl: 'partials/about-view.html',
       controller: 'DashController'
     })
+     .when('/help', {
+      templateUrl: 'partials/help-view.html',
+      controller: 'DashController'
+    })
     .otherwise({
       redirectTo: '/auth'
     });
