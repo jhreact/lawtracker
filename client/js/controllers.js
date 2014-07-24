@@ -10,27 +10,23 @@ angular.module('lawtracker.controllers', [
   $scope.newUser = {};
 
   $scope.signin = function () {
+    console.log('called in view', $scope.user)
     GitLab.signin($scope.user)
       .then(function (token) {
-        //add private key to all requests
-        $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
         $location.path('/dashboard');
       })
-      .catch(function (error) {
-        console.error(error); //todo: clear forms
-      });
   };
 
 
   $scope.signup = function () {
     // this input checking should be done in the view (with angular)
     if ($scope.newUser.password === $scope.newUser.confirmPassword && $scope.newUser.password.length >= 6) {
+
       $scope.newUser.username = $scope.newUser.name // git lab username will be person's name
       delete $scope.newUser.confirmPassword;
+
       GitLab.signup($scope.newUser)
         .then(function (token) {
-          //add private key to all requests
-          $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
           $location.path('/dashboard');
         })
         .catch(function (error) {
@@ -41,25 +37,17 @@ angular.module('lawtracker.controllers', [
   };
 })
 .controller('DashController', function ($scope, $http, $routeParams, GitLab) {
-  $scope.userContributions = [];
-  $scope.userBills = [];
-
-  GitLab.getAllBills(function(bills) {
+  GitLab.getAllBills()
+  .then(function(bills){
     $scope.userBills = bills;
-
-    if (bills.length){
-      GitLab.getContributionsForBillId(bills[0].id, function(contribs, billId) {
-        console.log(contribs)
-        for (var i=0; i<contribs.length; i++) {
-          // add the bill id to the contribution, this is needed to link to the right view
-          contribs[i].extend({billId: billId});
-          console.log(contribs[i])
-          $scope.userContributions.push(contribs[i]);
-        }
-      });
-    }
-  });
-  console.log($scope.userContributions)
+    return bills[0].id
+  })
+  .then(function(firstBillId){
+    GitLab.getContributionsForBillId(firstBillId)
+    .then(function(contributions){
+      $scope.userContributions = contributions;
+    })
+  })
 })
 .controller('BillDetailController', function($scope, $http, $routeParams) {
     $scope.bill = {id: $routeParams.billId};
