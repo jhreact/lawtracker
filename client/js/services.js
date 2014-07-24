@@ -17,11 +17,9 @@ angular.module('lawtracker.services', [])
     createRepository: createRepository
   };
 })
-
-.factory('Auth', function ($http, $location, $window) {
+.factory('GitLab', function($http){
   var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3'
 
-  //uses gitLab's built api to authenticate users
   var signin = function (user) {
     console.log(user);
     return $http({
@@ -49,15 +47,31 @@ angular.module('lawtracker.services', [])
     });
   };
 
-  var signout = function () {
-  };
+  
+  var getAllBills = function(cb){
+    $http({
+      method: 'GET',
+      url: APIURL + '/projects'
+    }).success(function(bills) {
+      cb(bills);
+    });
+  }
+
+  var getContributionsForBillId = function(billId, cb) {
+    console.log('getting commits')
+    $http({
+      method: 'GET',
+      url: APIURL + '/projects/' + billId + '/repository/commits'
+    }).success(function(commits) {
+      console.log(commits)
+      cb(commits, billId);
+    });
+  }
 
   return {
     signin: signin,
-    signup: signup
-    // signout: signout
-  };
-})
-.factory('GitLab', function($http){
-  var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3'
+    signup: signup,
+    getAllBills: getAllBills,
+    getContributionsForBillId: getContributionsForBillId
+  }
 });

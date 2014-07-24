@@ -10,15 +10,8 @@ app.use(express.static(__dirname + "/../client"))
 app.post('/api/user/new', function(req, res){
   // echo request to git lab server with an admin token
   // var newUser = req.body;
-  /*var newUser = {
-    email: 'as2r13fd4fdf@a13d2qer.biz',
-    password: 'piwewuipuyt',
-    username: '123qw4hsdifuqhu1',
-    name: 'asdg3gqw24ah'
-  };*/
   var userString = JSON.stringify(req.body);
   console.log(userString)
-
 
   var headers = {
      // 30 lines of code just for this line right here

@@ -1,19 +1,16 @@
-var gitLabURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3/projects/'
-var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3'
-var gitLabAuthURL = 'http://bitnami-gitlab-b76b.cloudapp.net/users/sign_in'
-var privateToken = '?private_token=AGrAjazL79tTNqJLeABp'
+var admin = 'AGrAjazL79tTNqJLeABp'
 
 angular.module('lawtracker.controllers', [
   'lawtracker.services',
-  'hljs'
+  // 'hljs'
 ])
 
-.controller('AuthController', function ($scope, $location, $http, Auth) {
+.controller('AuthController', function ($scope, $location, $http, GitLab) {
   $scope.user = {};
   $scope.newUser = {};
 
   $scope.signin = function () {
-    Auth.signin($scope.user)
+    GitLab.signin($scope.user)
       .then(function (token) {
         //add private key to all requests
         $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
@@ -30,7 +27,7 @@ angular.module('lawtracker.controllers', [
     if ($scope.newUser.password === $scope.newUser.confirmPassword && $scope.newUser.password.length >= 6) {
       $scope.newUser.username = $scope.newUser.name // git lab username will be person's name
       delete $scope.newUser.confirmPassword;
-      Auth.signup($scope.newUser)
+      GitLab.signup($scope.newUser)
         .then(function (token) {
           //add private key to all requests
           $http.defaults.headers.common['PRIVATE-TOKEN'] = token; 
@@ -43,29 +40,26 @@ angular.module('lawtracker.controllers', [
     }
   };
 })
-.controller('DashController', function ($scope, $http, $routeParams) {
+.controller('DashController', function ($scope, $http, $routeParams, GitLab) {
   $scope.userContributions = [];
   $scope.userBills = [];
-  
-  $http({
-    method: 'GET',
-    url: APIURL + '/projects'
-  }).success(function(data) {
-    $scope.userBills = data;
-    $http({
-      method: 'GET',
-      url: APIURL + '/projects/' + data[0].id + '/repository/commits'
-    }).success(function(commits) {
-      for (var j=0; j<commits.length; j++){
 
-        var commit = commits[j]
-        var commitStr = data[0].name + " - " + commit.title +  " (" + commit.created_at + ")";
-        if ($scope.userContributions.length < 4) {
-          $scope.userContributions.push({text: commitStr, billId: data[0].id, contribId: commit.id});
+  GitLab.getAllBills(function(bills) {
+    $scope.userBills = bills;
+
+    if (bills.length){
+      GitLab.getContributionsForBillId(bills[0].id, function(contribs, billId) {
+        console.log(contribs)
+        for (var i=0; i<contribs.length; i++) {
+          // add the bill id to the contribution, this is needed to link to the right view
+          contribs[i].extend({billId: billId});
+          console.log(contribs[i])
+          $scope.userContributions.push(contribs[i]);
         }
-      }
-    })
-  })
+      });
+    }
+  });
+  console.log($scope.userContributions)
 })
 .controller('BillDetailController', function($scope, $http, $routeParams) {
     $scope.bill = {id: $routeParams.billId};
