@@ -124,8 +124,44 @@ angular.module('lawtracker.controllers', [
     $scope.master = $scope.bill;
 
     $scope.create = function(bill) {
-      $scope.master = angular.copy(bill);
-      Repository.createRepository($scope.user, $scope.bill.filename);
+      // $scope.master = angular.copy(bill);
+      // Repository.createRepository($scope.user, $scope.bill.filename);
+      var sanitizedName = $scope.bill.filename.replace('/ /_/g');
+      // $http.post(gitLabURL + privateToken, {"name": sanitizedName, 'description': $scope.bill.description }).success(function(new_project) {
+      $http.post(gitLabURL + "user/" + $scope.user.id + privateToken  , {"name": sanitizedName, 'description': $scope.bill.description, "default_branch": "master"}).success(function(new_project) {
+        console.log("Created new project:");
+        console.log(new_project);
+
+        // need to set up a hacky service. should just pass the name of a repo
+        // and initalize it so the master branch gets created. right now,
+        // creating a new project/repository leaves the default branch as null.
+        // Other option is to create a repo on a users behalf, in which case we
+        // have the option to set the default branch. (NM, this doesn't work)
+        // $http.post(gitLabURL + new_project.id + '/repository/branches' + privateToken, {'id': new_project.id, 'branch_name': 'master'}).success(function(branch_data) {
+          var file_path;
+          var commitMsg = bill.commitMsg || "Updated at " + Date.now();
+
+          // $http.put(gitLabURL + new_project.id + '/repository/files' + privateToken, {'id': new_project.id, 'content': $scope.bill.content, 'file_path': new_project.path, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
+          //   $scope.master = angular.copy(bill);
+          // })
+          $http.post('/api/repositories/create', {'id': new_project.id, 'content': $scope.bill.content, 'file_path': new_project.path, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
+            $scope.master = angular.copy(bill);
+          })
+          .error(function(file_create_err) {
+            console.log("got an error when trying to update the bill");
+            console.log(file_create_err);
+          });
+        // })
+        // .error(function(branch_err) {
+        //   console.log("Error creating default branch for new project");
+        //   console.log(branch_err);
+        // });
+
+      })
+      .error(function(err) {
+        console.log(err);
+      });
+
     };
 
     $scope.reset = function() {
