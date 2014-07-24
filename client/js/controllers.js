@@ -38,13 +38,15 @@ angular.module('lawtracker.controllers', [
 })
 .controller('DashController', function ($scope, $http, $routeParams, GitLab) {
   GitLab.getAllBills()
-  .then(function(bills){
+  .then(function(bills) {
     $scope.userBills = bills;
     return bills[0].id
   })
-  .then(function(firstBillId){
+  .then(function(firstBillId) {
+    $scope.billIdForContributions =  firstBillId;
+    
     GitLab.getContributionsForBillId(firstBillId)
-    .then(function(contributions){
+    .then(function(contributions) {
       $scope.userContributions = contributions;
     })
   })
