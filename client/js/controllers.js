@@ -137,7 +137,7 @@ angular.module('lawtracker.controllers', [
        */
       // $scope.master = angular.copy(bill);
       // Repository.createRepository($scope.user, $scope.bill.filename);
-      var sanitizedName = $scope.bill.filename.replace('/ /-/g');
+      var sanitizedName = $scope.bill.filename.replace(' ', '-');
       $http.post(gitLabURL + privateToken, {"name": sanitizedName, 'description': $scope.bill.description }).success(function(new_project) {
       // $http.post(gitLabURL + "user/" + $scope.user.id + privateToken  , {"name": sanitizedName, 'description': $scope.bill.description, "default_branch": "master"}).success(function(new_project) {
         console.log("Created new project:");
@@ -155,7 +155,7 @@ angular.module('lawtracker.controllers', [
           // $http.put(gitLabURL + new_project.id + '/repository/files' + privateToken, {'id': new_project.id, 'content': $scope.bill.content, 'file_path': new_project.path, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
           //   $scope.master = angular.copy(bill);
           // })
-          $http.post('/api/repositories/create', {'id': new_project.id, 'file_path': new_project.path, 'branch_name': 'master', 'encoding': 'text', 'content': $scope.bill.content, 'commit_message': commitMsg}).success(function(data) {
+      $http.post("/api/repositories/create", {"id": new_project.id, "file_path": new_project.path, "branch_name": "master", "encoding": "text", "content": $scope.bill.content, "commit_message": commitMsg, "project_name": sanitizedName, "username": $scope.user.username, "origin": new_project.http_url_to_repo}).success(function(data) {
             $scope.master = angular.copy(bill);
           })
           .error(function(file_create_err) {
