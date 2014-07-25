@@ -1,10 +1,10 @@
 angular.module('lawtracker.services', [])
 .factory('GitLab', function($q, $http){
   var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3';
-  var ADMIN = 'AGrAjazL79tTNqJLeABp';
-
+  
   // REMOVE IN PROD
-  $http.defaults.headers.common['PRIVATE-TOKEN'] = ADMIN; 
+  // var ADMIN = 'AGrAjazL79tTNqJLeABp';
+  // $http.defaults.headers.common['PRIVATE-TOKEN'] = ADMIN; 
   // /REMOVE IN PROD
 
   var user = {}; // closure scope for future access
@@ -65,14 +65,36 @@ angular.module('lawtracker.services', [])
     })
   }
 
+  var getAllDiffs = function(billId, sha) {
+    return $http.get(APIURL + '/projects/' + billId + '/repository/commits/' + sha + '/diff')
+    .then(function(diffs){
+      return diffs.data;
+    })
+  }
 
   var getRawLatestCommitData = function(billId, latestCommitId){
     return $http.get(APIURL + '/projects/' + billId + '/repository/raw_blobs/' + latestCommitId)
     .then(function(billText) {
       return billText.data;
     })
+  
   }
 
+  var getRevisionContent = function(billId, revisionId, fileName) {
+    //                                                                                   //todo: make this part better
+    return $http.get(APIURL + '/projects/' + billId + '/repository/blobs/' + revisionId + '?filepath=' + fileName)
+    .then(function(revisionContent){
+      return revisionContent.data;
+    })
+  }
+
+  var commit = function(billId, fileContent, fileName, commitMsg){
+    return $http.put(APIURL + '/projects/' + billId + '/repository/files', 
+      {'id': billId, 'content': fileContent, 'file_path': fileName, 'branch_name': 'master', 'commit_message': commitMsg}
+    ).then(function(resp){
+      return resp.data
+    })
+  }
 
 
   return {
@@ -83,6 +105,9 @@ angular.module('lawtracker.services', [])
     getBillById: getBillById,
     getBillCommitTree: getBillCommitTree,
     getRawLatestCommitData: getRawLatestCommitData,
-    getAllRevisions: getAllRevisions
+    getAllRevisions: getAllRevisions,
+    getAllDiffs: getAllDiffs,
+    getRevisionContent: getRevisionContent,
+    commit: commit
   }
 });
