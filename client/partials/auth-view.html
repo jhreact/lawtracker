@@ -1,12 +1,14 @@
+<div ng-class="viewBackground" ng-controller="AuthController">
+</div>
+
 <div class="container">
-  <div class="row">
-    
-    <div class="col-xs-5">
-      <form class="form-signin" role="form" ng-submit="signin()">
+  <div class="row">  
+    <div class="col-xs-6">
+      <form class="form-signin" role="form" id="signin" ng-submit="signin()">
         <h2 class="form-signin-heading">Sign In</h2>
         <input type="email" ng-model="user.email" class="form-control" placeholder="Email address" required autofocus>
         <input type="password" ng-model="user.password" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" id="auth-button" type="submit">Sign in</button>
         <!-- will implement remember me chackbox later
             <div class="checkbox">
               <label>
@@ -15,12 +17,9 @@
             </div>
           -->    
       </form>
-    </div>
-
-    <div class="col-xs-2"></div> <!-- there must be a better way -->
-    
-    <div class="col-xs-5">
-      <form class="form-signin" role="form" ng-submit="signup()">
+    </div>    
+    <div class="col-xs-6">
+      <form class="form-signin" id="signup" role="form" ng-submit="signup()">
         <h2 class="form-signin-heading">Sign Up</h2>
         <input type="text" ng-model="newUser.name" class="form-control" placeholder="Full name" required>
         <input type="email" ng-model="newUser.email" class="form-control" placeholder="Email address" required>
@@ -33,11 +32,10 @@
               </label>
             </div>
           -->    
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" id="auth-button" type="submit">Sign in</button>
       </form>
     </div>
-
-  </div>
+  </div>  <!-- end row -->
   <a id="hrBanner" href="http://hackreactor.com"> 
     <img style="position: fixed; top: 0; right: 0; border: 0;" src="http://i.imgur.com/x86kKmF.png" alt="Built at Hack Reactor"> 
   </a>

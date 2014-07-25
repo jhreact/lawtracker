@@ -1,7 +1,43 @@
+div .background-capitol{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+body .background-capitol {
+  margin-top: 1px;
+  background: url("../img/capitol.jpg") no-repeat center 0.2px fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
   margin-top: 60px;
 }
 
+#auth-title{
+  text-align: left;
+  margin-left: 3%
+}
+#signin {
+  margin-right: 28%;
+  margin-left: 10%;
+}
+
+#signup {
+  margin-left: 43%;
+
+}
+
+#auth-button {
+  background-color: #003399;
+  background-color: #003399;
+
+}
 #jumbo-top {
   margin-top: 2%;
 }

@@ -6,6 +6,7 @@ angular.module('lawtracker.controllers', [
 .controller('AuthController', function ($scope, $location, $http, GitLab) {
   $scope.user = {};
   $scope.newUser = {};
+  $scope.viewBackground = "background-capitol";
 
   $scope.signin = function () {
     console.log('called in view', $scope.user)
