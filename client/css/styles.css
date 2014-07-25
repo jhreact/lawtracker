@@ -19,6 +19,14 @@ body {
   margin-top: 60px;
 }
 
+#textBox {
+  padding-left: 10px;
+  padding-top: 5px;
+}
+#userInfoBox {
+  text-align: center;
+}
+
 #userImage {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
