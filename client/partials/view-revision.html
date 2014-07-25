@@ -17,7 +17,7 @@
         </li>
         <li><a href="#/dashboard">My Profile</a>
         </li>
-        <li><a href="#contact">Help</a>
+        <li><a href="#/help">Help</a>
         </li>
       </ul>
     </div>
@@ -29,11 +29,9 @@
 <div class="container" ng-controller="ViewRevisionController">
   <div class="row" id="gray">
     <div class="col-md-10">
-      <! -- main content -->
-      <p>
-        <pre>{{bill.diff}}</pre>
-      </p>
-
+      <!-- main content -->
+      <div hljs language="diff" source="bill.diff">
+      </div> <!-- end hljs -->  
     </div>
     <div class="col-md-2">
       <!-- sidbar content -->
@@ -42,12 +40,22 @@
           <a href="/wireframes/fork.html">Fork</a>
         </li>
         <li>
+          <a href="/#/bills/create">Create</a>
+        </li>
+        <li>
           <a href="/#/bills/{{bill.id}}/edit">Edit</a>
         </li>
         <li>
           <a href="/#/bills/{{bill.id}}/revisions">Revisions</a>
         </li>
       </ul>
-
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            Full content:<br />
+            <p>
+                <pre>{{bill.content}}</pre>
+            </p>
+        </div>
     </div>
   </div>

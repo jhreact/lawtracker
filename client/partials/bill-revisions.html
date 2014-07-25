@@ -17,7 +17,7 @@
         </li>
         <li><a href="#/dashboard">My Profile</a>
         </li>
-        <li><a href="#contact">Help</a>
+        <li><a href="#/help">Help</a>
         </li>
       </ul>
     </div>
@@ -39,7 +39,7 @@
           <th>Author Email</th>
           <th>Date</th>
         </tr>
-        <tr ng-repeat="revision in revisions">
+        <tr ng-repeat="revision in revisions | filter:query">
           <td>{{revision.short_id}}</td>
           <td><a href="/#/bills/{{bill.id}}/revisions/{{revision.id}}">{{revision.title}}</a></td>
           <td>{{revision.author_name}}</td>
@@ -50,9 +50,13 @@
     </div>
     <div class="col-md-2">
       <!-- sidbar content -->
+      Search: <input ng-model="query">
       <ul class="nav nav-pills nav-stacked">
         <li>
           <a href="/wireframes/fork.html">Fork</a>
+        </li>
+        <li>
+          <a href="/#/bills/create">Create</a>
         </li>
         <li>
           <a href="/#/bills/{{bill.id}}">View</a>

@@ -1,6 +1,7 @@
 angular.module('lawtracker', [
   'ngRoute',
-  'lawtracker.controllers'
+  'lawtracker.controllers',
+  'hljs'
 ])
 .config(function($routeProvider, $httpProvider) {
   $routeProvider
@@ -34,6 +35,10 @@ angular.module('lawtracker', [
     })
      .when('/about', {
       templateUrl: 'partials/about-view.html',
+      controller: 'DashController'
+    })
+     .when('/help', {
+      templateUrl: 'partials/help-view.html',
       controller: 'DashController'
     })
     .otherwise({
