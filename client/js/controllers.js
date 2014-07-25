@@ -9,7 +9,6 @@ angular.module('lawtracker.controllers', [
   $scope.viewBackground = "background-capitol";
 
   $scope.signin = function () {
-    console.log('called in view', $scope.user)
     GitLab.signin($scope.user)
       .then(function (token) {
         $location.path('/dashboard');

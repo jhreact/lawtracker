@@ -10,7 +10,6 @@ angular.module('lawtracker.services', [])
   var user = {}; // closure scope for future access
 
   var signin = function (user) {
-    console.log('in service: ', user);
     return $http.post(APIURL + '/session', user)
     .then(function (resp) {
       user = resp.data;
@@ -20,10 +19,8 @@ angular.module('lawtracker.services', [])
   };
 
   var signup = function (user) {
-    console.log(user)
     return $http.post('/api/user/new', user)
     .then(function (newUser) {
-      console.log(newUser)
       return signin({email: newUser.email, password: user.password}); //sign in the user with new details
     });
   };
