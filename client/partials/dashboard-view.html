@@ -38,18 +38,25 @@
 
 <!-- Middle Section -->
 <div class="container">
-  <div class="col-sm-7"id="dashboard-body">
-    <h2>Contributions</h2>
-    <ul id="dashboard-body">
-      <li class="contribution" ng-repeat="contrib in userContributions"><a href="#/bills/{{billIdForContributions}}/revisions/{{contrib.id}}">{{ contrib.title }}</a></li>
-    </ul>
-    <h2> Bills </h2>
-    <ul id="dashboard-body">
-      <li class="userBill" ng-repeat="userBill in userBills"><a href="#/bills/{{userBill.id}}">{{ userBill.description }}</a></li>
-    </ul>
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">Contributions</div>
+        <table class="table">
+          <tr ng-repeat="contrib in userContributions"> 
+            <td class="contribution" ><a href="#/bills/{{billIdForContributions}}/revisions/{{contrib.id}}">{{ contrib.title }}</a></td> 
+          </tr>
+        </table>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Bills</div>
+        <table class="table">
+          <tr ng-repeat="userBill in userBills">
+            <td class="contribution" ><a href="#/bills/{{userBill.id}}">{{ userBill.description }}</a></td>
+          </tr>  
+        </table>
+    </div>  
   </div>
-  <div class="col-sm-5">
+  <div class="col-sm-4">
     <img src="img/barack-obama.jpg">
   </div>
-
 </div> <!-- End Middle Section -->
