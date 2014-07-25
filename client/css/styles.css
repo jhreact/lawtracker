@@ -5,9 +5,10 @@ div .background-capitol{
   left: 0;
   right: 0;
 }
+
 body .background-capitol {
   margin-top: 1px;
-  background: url("../img/capitol.jpg") no-repeat center 0.1px fixed; 
+  background: url("../img/capitol.jpg") no-repeat center 0.2px fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
