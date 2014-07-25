@@ -1,5 +1,12 @@
-body #auth-view {
-  margin-top: 100px;
+div .background-capitol{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+body .background-capitol {
+  margin-top: 1px;
   background: url("../img/capitol.jpg") no-repeat center 0.1px fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
