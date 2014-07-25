@@ -1,7 +1,7 @@
 angular.module('lawtracker.services', [])
-.factory('GitLab', function($q, $http){
+.factory('GitLab', function($http){
   var APIURL = 'http://bitnami-gitlab-b76b.cloudapp.net/api/v3';
-  
+
   // REMOVE IN PROD
   // var ADMIN = 'AGrAjazL79tTNqJLeABp';
   // $http.defaults.headers.common['PRIVATE-TOKEN'] = ADMIN; 
