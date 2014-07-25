@@ -1,7 +1,15 @@
 body {
   margin-top: 60px;
+  background: url("../img/capitol.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
+#auth-button {
+  background-color: #003399;
+}
 #jumbo-top {
   margin-top: 2%;
 }
