@@ -1,10 +1,20 @@
 body {
-  margin-top: 60px;
-  background: url("../img/capitol.jpg") no-repeat center center fixed; 
+  margin-top: 100px;
+  background: url("../img/capitol.jpg") no-repeat center 0.1px fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+#signin {
+  margin-right: 28%;
+  margin-left: 10%;
+}
+
+#signup {
+  margin-left: 43%;
+
 }
 
 #auth-button {
