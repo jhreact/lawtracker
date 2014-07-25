@@ -50,12 +50,21 @@ angular.module('lawtracker.services', [])
     })    
   }
 
+  var getAllRevisions = function(billId) {
+    return $http.get(APIURL + '/projects/' + billId + '/repository/commits')
+    .then(function(data) {
+      console.log(data)
+      return data.data
+    })
+  }
+
   var getBillCommitTree = function(billId) {
     return $http.get(APIURL + '/projects/' + billId + '/repository/tree')
     .then(function(commitTree) {
       return commitTree.data;
     })
   }
+
 
   var getRawLatestCommitData = function(billId, latestCommitId){
     return $http.get(APIURL + '/projects/' + billId + '/repository/raw_blobs/' + latestCommitId)
@@ -73,6 +82,7 @@ angular.module('lawtracker.services', [])
     getContributionsForBillId: getContributionsForBillId,
     getBillById: getBillById,
     getBillCommitTree: getBillCommitTree,
-    getRawLatestCommitData: getRawLatestCommitData
+    getRawLatestCommitData: getRawLatestCommitData,
+    getAllRevisions: getAllRevisions
   }
 });

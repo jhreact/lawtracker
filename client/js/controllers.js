@@ -67,20 +67,10 @@ angular.module('lawtracker.controllers', [
   })
 })
 .controller('BillRevisionsController', function($scope, $http, $routeParams, GitLab) {
-    $scope.bill = {id: $routeParams.billId};
-    $scope.revisions = {};
-
-    // TODO: Pass in the user dynamically
-
-    $scope.user = {username: 'user', id: 1};
-
-    $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/commits').success(function(data) {
-      $scope.revisions = data;
+    GitLab.getAllRevisions($routeParams.billId)
+    .then(function(revisions) {
+      $scope.revisions = revisions;
     })
-    .error(function(err) {
-      console.log(err)
-    });
-
 })
 .controller('ViewRevisionController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {id: $routeParams.billId};
