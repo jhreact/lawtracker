@@ -34,7 +34,8 @@ module.exports = {
     var username = req.body.username;
     var filePath = req.body.file_path;
     var fileContent = req.body.content;
-    var repoOrigin = req.body.origin;
+    var httpOrigin = req.body.http_origin;
+    var sshOrigin = req.body.ssh_origin;
     var tmpdir = tempdir();
     // var tempUserDir = TEMPREPODIR + '/' + username;
     // var tempUserRepoDir = tempUserDir + '/' + filePath;
@@ -60,7 +61,7 @@ module.exports = {
       console.log("Error: git commit failed in " + tempUserRepoDir);
     }
     console.log("Attmpting to update remote to passed in origin");
-    if (exec('git remote add origin ' + repoOrigin, {async: false}).code !== 0) {
+    if (exec('git remote add origin ' + sshOrigin, {async: false}).code !== 0) {
       console.log("Error: failed to add remote git origin for project in " + tempUserRepoDir);
     }
     console.log("Attempting to push to remote ");

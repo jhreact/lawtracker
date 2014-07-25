@@ -124,22 +124,9 @@ angular.module('lawtracker.controllers', [
     $scope.master = $scope.bill;
 
     $scope.create = function(bill) {
-      /* if we're going to create a repo on the filesystem, we need to:
-       * (where projectname is sanitized)
-       * mkdir repositories/<username>/<projectname>
-       * cd repositories/<username>/<projectname>
-       * git init
-       * fs.writeFile(<projectname>)
-       * git add <projectname>
-       * git commit -m "<commit message>"
-       * git remote add origin git@<host>:<username>/<projectname>.git
-       * git push -u origin master
-       */
       // $scope.master = angular.copy(bill);
-      // Repository.createRepository($scope.user, $scope.bill.filename);
       var sanitizedName = $scope.bill.filename.replace(' ', '-');
       $http.post(gitLabURL + privateToken, {"name": sanitizedName, 'description': $scope.bill.description }).success(function(new_project) {
-      // $http.post(gitLabURL + "user/" + $scope.user.id + privateToken  , {"name": sanitizedName, 'description': $scope.bill.description, "default_branch": "master"}).success(function(new_project) {
         console.log("Created new project:");
         console.log(new_project);
 
@@ -152,10 +139,7 @@ angular.module('lawtracker.controllers', [
           var file_path;
           var commitMsg = bill.commitMsg || "Updated at " + Date.now();
 
-          // $http.put(gitLabURL + new_project.id + '/repository/files' + privateToken, {'id': new_project.id, 'content': $scope.bill.content, 'file_path': new_project.path, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
-          //   $scope.master = angular.copy(bill);
-          // })
-      $http.post("/api/repositories/create", {"id": new_project.id, "file_path": new_project.path, "branch_name": "master", "encoding": "text", "content": $scope.bill.content, "commit_message": commitMsg, "project_name": sanitizedName, "username": $scope.user.username, "origin": new_project.http_url_to_repo}).success(function(data) {
+      $http.post("/api/repositories/create", {"id": new_project.id, "file_path": new_project.path, "branch_name": "master", "encoding": "text", "content": $scope.bill.content, "commit_message": commitMsg, "project_name": sanitizedName, "username": $scope.user.username, "http_origin": new_project.http_url_to_repo, "ssh_origin": new_project.ssh_url_to_repo}).success(function(data) {
             $scope.master = angular.copy(bill);
           })
           .error(function(file_create_err) {
