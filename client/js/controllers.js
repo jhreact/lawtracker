@@ -1,5 +1,3 @@
-var admin = 'AGrAjazL79tTNqJLeABp'
-
 angular.module('lawtracker.controllers', [
   'lawtracker.services',
   // 'hljs'
@@ -39,46 +37,36 @@ angular.module('lawtracker.controllers', [
 .controller('DashController', function ($scope, $http, $routeParams, GitLab) {
   GitLab.getAllBills()
   .then(function(bills) {
+    console.log(bills)
     $scope.userBills = bills;
     return bills[0].id
   })
   .then(function(firstBillId) {
     $scope.billIdForContributions =  firstBillId;
-    
+
     GitLab.getContributionsForBillId(firstBillId)
     .then(function(contributions) {
       $scope.userContributions = contributions;
     })
   })
 })
-.controller('BillDetailController', function($scope, $http, $routeParams) {
-    $scope.bill = {id: $routeParams.billId};
+.controller('BillDetailController', function($scope, $http, $routeParams, GitLab) {
 
-    $http.get(gitLabURL + $routeParams.billId + privateToken).success(function(data) {
-      $scope.bill = data;
+    GitLab.getBillById($routeParams.billId)
+    .then(function(bill){
+      $scope.bill = bill;
     })
-    .error(function(err) {
-      console.log(err)
-    });
 
-    $http.get(gitLabURL + $routeParams.billId + '/repository/tree' + privateToken).success(function(data) {
-      var repoTree = data;
-      var repoSha = data[0].id;
-      var fileName = data[0].name;
-
-      $http.get(gitLabURL + $routeParams.billId + '/repository/raw_blobs/' + repoSha + privateToken).success(function(data) {
-        $scope.bill.content = data;
+    GitLab.getBillCommitTree($routeParams.billId)
+    .then(function(commitTree){
+      var latestCommitId = commitTree[0].id
+      GitLab.getRawLatestCommitData($routeParams.billId, latestCommitId)
+      .then(function(rawBillData) {
+        $scope.bill.content = rawBillData;  
       })
-      .error(function(err) {
-        console.log(err)
-      });
     })
-    .error(function(err) {
-      console.log(err)
-    });
-
 })
-.controller('BillRevisionsController', function($scope, $http, $routeParams) {
+.controller('BillRevisionsController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {id: $routeParams.billId};
     $scope.revisions = {};
 
@@ -86,7 +74,7 @@ angular.module('lawtracker.controllers', [
 
     $scope.user = {username: 'user', id: 1};
 
-    $http.get(gitLabURL + $routeParams.billId + '/repository/commits' + privateToken).success(function(data) {
+    $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/commits').success(function(data) {
       $scope.revisions = data;
     })
     .error(function(err) {
@@ -94,10 +82,9 @@ angular.module('lawtracker.controllers', [
     });
 
 })
-.controller('ViewRevisionController',
-  function($scope, $http, $routeParams) {
+.controller('ViewRevisionController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {id: $routeParams.billId};
-    $http.get(gitLabURL + $routeParams.billId + '/repository/commits/' + $routeParams.sha + '/diff' + privateToken).success(function(data) {
+    $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/commits/' + $routeParams.sha + '/diff').success(function(data) {
       $scope.bill.diff = data[0].diff;
     })
     .error(function(err) {
@@ -105,9 +92,9 @@ angular.module('lawtracker.controllers', [
     });
 
     // get the file path
-    $http.get(gitLabURL + $routeParams.billId + '/repository/tree' + privateToken).success(function(file_path_data) {
+    $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/tree').success(function(file_path_data) {
       // now look up the raw file content for that sha
-      $http.get(gitLabURL + $routeParams.billId + '/repository/blobs/' + $routeParams.sha + privateToken + "&filepath=" + file_path_data[0].name).success(function(revision_content) {
+      $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/blobs/' + $routeParams.sha + "&filepath=" + file_path_data[0].name).success(function(revision_content) {
         $scope.bill.content = revision_content;
       })
       .error(function(content_err) {
@@ -120,7 +107,7 @@ angular.module('lawtracker.controllers', [
     });
 
 })
-.controller('CreateBillController', function($scope, $http, $routeParams, Repository) {
+.controller('CreateBillController', function($scope, $http, $routeParams, Repository, GitLab) {
     $scope.bill = {};
     // Hardcode this for now...once we get login working we should know who
     // the user is and be able to access info via the api endpoint
@@ -142,12 +129,12 @@ angular.module('lawtracker.controllers', [
     $scope.reset();
 
 })
-.controller('EditBillController', function($scope, $http, $routeParams) {
+.controller('EditBillController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {};
     // Hardcode this for now...once we get login working we should know who
     // the user is and be able to access info via the api endpoint
     $scope.user = {username: 'user', id: 1};
-    $http.get(gitLabURL + $routeParams.billId + privateToken).success(function(data) {
+    $http.get(APIURL + '/projects/' + $routeParams.billId).success(function(data) {
       // console.log(data);
       $scope.bill.id = data.id;
       $scope.bill.description = data.description;
@@ -156,12 +143,12 @@ angular.module('lawtracker.controllers', [
       console.log(err)
     });
 
-    $http.get(gitLabURL + $routeParams.billId + '/repository/tree' + privateToken).success(function(data) {
+    $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/tree').success(function(data) {
       var repoTree = data;
       var repoSha = data[0].id;
       $scope.bill.fileName = data[0].name;
 
-      $http.get(gitLabURL + $routeParams.billId + '/repository/raw_blobs/' + repoSha + privateToken).success(function(data) {
+      $http.get(APIURL + '/projects/' + $routeParams.billId + '/repository/raw_blobs/' + repoSha).success(function(data) {
         $scope.bill.content = data;
       })
       .error(function(err) {
@@ -178,7 +165,7 @@ angular.module('lawtracker.controllers', [
       var file_path, branch_name, content, commit_message;
       var commitMsg = bill.commitMsg || "Updated at " + Date.now();
 
-      $http.put(gitLabURL + bill.id + '/repository/files' + privateToken, {'id': $scope.bill.id, 'content': $scope.bill.content, 'file_path': $scope.bill.fileName, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
+      $http.put(APIURL + '/projects/' + bill.id + '/repository/files', {'id': $scope.bill.id, 'content': $scope.bill.content, 'file_path': $scope.bill.fileName, 'branch_name': 'master', 'commit_message': commitMsg}).success(function(data) {
         console.log("here's what we got back after trying to edit the file via the web api");
         console.log(data);
 
