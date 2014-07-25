@@ -1,4 +1,4 @@
-body {
+body #auth-view {
   margin-top: 100px;
   background: url("../img/capitol.jpg") no-repeat center 0.1px fixed; 
   -webkit-background-size: cover;
@@ -7,6 +7,14 @@ body {
   background-size: cover;
 }
 
+body {
+  margin-top: 60px;
+}
+
+#auth-title{
+  text-align: left;
+  margin-left: 3%
+}
 #signin {
   margin-right: 28%;
   margin-left: 10%;
@@ -19,6 +27,8 @@ body {
 
 #auth-button {
   background-color: #003399;
+  background-color: #003399;
+
 }
 #jumbo-top {
   margin-top: 2%;
