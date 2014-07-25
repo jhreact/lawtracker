@@ -24,7 +24,8 @@
   "dependencies": {
     "body-parser": "^1.4.3",
     "express": "^4.6.1",
-    "static": "^2.0.0"
+    "static": "^2.0.0",
+    "shelljs": "latest"
   }
 
 }
