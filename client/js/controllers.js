@@ -52,19 +52,19 @@ angular.module('lawtracker.controllers', [
 })
 .controller('BillDetailController', function($scope, $http, $routeParams, GitLab) {
 
-    GitLab.getBillById($routeParams.billId)
-    .then(function(bill){
-      $scope.bill = bill;
-    })
+  GitLab.getBillById($routeParams.billId)
+  .then(function(bill){
+    $scope.bill = bill;
+  })
 
-    GitLab.getBillCommitTree($routeParams.billId)
-    .then(function(commitTree){
-      var latestCommitId = commitTree[0].id
-      GitLab.getRawLatestCommitData($routeParams.billId, latestCommitId)
-      .then(function(rawBillData) {
-        $scope.bill.content = rawBillData;  
-      })
+  GitLab.getBillCommitTree($routeParams.billId)
+  .then(function(commitTree){
+    var latestCommitId = commitTree[0].id
+    GitLab.getRawLatestCommitData($routeParams.billId, latestCommitId)
+    .then(function(rawBillData) {
+      $scope.bill.content = rawBillData;  
     })
+  })
 })
 .controller('BillRevisionsController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {id: $routeParams.billId};
