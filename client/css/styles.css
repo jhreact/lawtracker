@@ -19,6 +19,13 @@ body {
   margin-top: 60px;
 }
 
+#userImage {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px; /* future proofing */
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */
+}
+
 #auth-title{
   text-align: left;
   margin-left: 3%
