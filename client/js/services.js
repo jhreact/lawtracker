@@ -5,7 +5,7 @@ angular.module('lawtracker.services', [])
     return $http({
       method: 'POST',
       url: '/api/repositories/create',
-      data: JSON.stringify(data)
+      data: data
     });
   };
 
