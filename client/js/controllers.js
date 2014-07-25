@@ -67,10 +67,10 @@ angular.module('lawtracker.controllers', [
   })
 })
 .controller('BillRevisionsController', function($scope, $http, $routeParams, GitLab) {
-    GitLab.getAllRevisions($routeParams.billId)
-    .then(function(revisions) {
-      $scope.revisions = revisions;
-    })
+  GitLab.getAllRevisions($routeParams.billId)
+  .then(function(revisions) {
+    $scope.revisions = revisions;
+  })
 })
 .controller('ViewRevisionController', function($scope, $http, $routeParams, GitLab) {
     $scope.bill = {id: $routeParams.billId};
