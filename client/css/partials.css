@@ -1,6 +1,8 @@
 body {
   margin-top: 60px;
+  background-image: url("../img/capitol.jpg");
 }
+
 
 #dashboard-body {
   background-color: #CCCCCC;

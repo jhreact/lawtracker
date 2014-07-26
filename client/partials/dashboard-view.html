@@ -17,7 +17,9 @@
         </li>
         <li><a href="#/dashboard">My Profile</a>
         </li>
-        <li><a href="#contact">Help</a>
+        <li><a href="/#/bills/create">Create Bill</a>
+        </li>
+        <li><a href="#/help">Help</a>
         </li>
       </ul>
     </div>
@@ -41,7 +43,7 @@
   <div class="col-sm-7"id="dashboard-body">
     <h2>Contributions</h2>
     <ul id="dashboard-body">
-      <li class="contribution" ng-repeat="contrib in userContributions"><a href="#/bills/{{contrib.billId}}/revisions/{{contrib.contribId}}">{{ contrib.text }}</a></li>
+      <li class="contribution" ng-repeat="contrib in userContributions"><a href="#/bills/{{billIdForContributions}}/revisions/{{contrib.id}}">{{ contrib.title }}</a></li>
     </ul>
     <h2> Bills </h2>
     <ul id="dashboard-body">
