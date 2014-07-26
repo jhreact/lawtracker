@@ -1,17 +1,8 @@
-<div class="container" id="auth-view">
-
-<div class="container" >
-  <div class="row">
-    <div class="col-md-9" id="auth-title">
-      <h1> Law Tracker </h1>
-    </div>
-  </div>
+<div ng-class="viewBackground" ng-controller="AuthController">
 </div>
 
-
 <div class="container">
-  <div class="row">
-    
+  <div class="row">  
     <div class="col-xs-6">
       <form class="form-signin" role="form" id="signin" ng-submit="signin()">
         <h2 class="form-signin-heading">Sign In</h2>
@@ -44,10 +35,8 @@
         <button class="btn btn-lg btn-primary btn-block" id="auth-button" type="submit">Sign in</button>
       </form>
     </div>
-
-  </div>
+  </div>  <!-- end row -->
   <a id="hrBanner" href="http://hackreactor.com"> 
     <img style="position: fixed; top: 0; right: 0; border: 0;" src="http://i.imgur.com/x86kKmF.png" alt="Built at Hack Reactor"> 
   </a>
-</div>
 </div>

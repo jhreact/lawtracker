@@ -1,6 +1,14 @@
-body #auth-view {
-  margin-top: 100px;
-  background: url("../img/capitol.jpg") no-repeat center 0.1px fixed; 
+div .background-capitol{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+body .background-capitol {
+  margin-top: 1px;
+  background: url("../img/capitol.jpg") no-repeat center 0.2px fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -9,6 +17,21 @@ body #auth-view {
 
 body {
   margin-top: 60px;
+}
+
+#textBox {
+  padding-left: 10px;
+  padding-top: 5px;
+}
+#userInfoBox {
+  text-align: center;
+}
+
+#userImage {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px; /* future proofing */
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */
 }
 
 #auth-title{
