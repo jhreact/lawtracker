@@ -103,7 +103,7 @@ angular.module('lawtracker.controllers', [
   $scope.create = function(bill) {
     var sanitizedName = $scope.bill.filename.replace(' ', '-');
 
-    GitLab.createBill(sanitizedName, $scope.bill.description, $scope.bill.content);
+    GitLab.createBill(sanitizedName, $scope.bill.description, $scope.bill.content)
     .then(function(billData) {
       $scope.bill = billData;
     });
